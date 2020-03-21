@@ -50,7 +50,7 @@ def mentioned_reply(keywords,prev_id) :
 	return init_id
 		
 
-#Function that deals with Datamus API calls and gets results for query
+#Function that deals with Datamuse API calls and gets results for query
 def datamuse( word, usecase):
 	base_url = "http://api.datamuse.com/words"
 	query_base = 'rel_'
