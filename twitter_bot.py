@@ -5,10 +5,11 @@ import requests
 import json
 import tweepy
 import time
+import env
 
 #OAuth handler for token authentication
-auth = tweepy.OAuthHandler('cpJv6ggRa36AbBv7y34oOMNVc','QJ1PvbkvuOhRFkff1xA9Uh3UPu8sE4M8qlw6QjNFbDimrI1Mzj')
-auth.set_access_token('2995257804-nML6wjPnCo5am5TlbVbsi2fGulIIVN4280dipCl','FzeN99RJWi40XDv4zfbMuzQywLnhj4AW88UsrtAkCMR7O')
+auth = tweepy.OAuthHandler(env.API_KEY,env.API_SEC_KEY)
+auth.set_access_token(env.ACCESS_TOK,env.ACCESS_TOK_SEC)
 
 
 
