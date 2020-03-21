@@ -11,6 +11,7 @@ auth = tweepy.OAuthHandler('cpJv6ggRa36AbBv7y34oOMNVc','QJ1PvbkvuOhRFkff1xA9Uh3U
 auth.set_access_token('2995257804-nML6wjPnCo5am5TlbVbsi2fGulIIVN4280dipCl','FzeN99RJWi40XDv4zfbMuzQywLnhj4AW88UsrtAkCMR7O')
 
 
+
 #Function which checks tweets and gives reply to query tweet
 def mentioned_reply(keywords,prev_id) :
 	init_id = prev_id
@@ -22,7 +23,6 @@ def mentioned_reply(keywords,prev_id) :
 	
 		#Get id of recent tweet
 		init_id = max(twt.id, init_id)
-	
 		#Checks if the tweet is a reply or a timeline tweet
 		if twt.in_reply_to_status_id is not None :
 			continue
@@ -31,24 +31,29 @@ def mentioned_reply(keywords,prev_id) :
 		if not twt.favorited :
 			api.create_favorite(twt.id)
 
+			#Checks for certain keywords so as to not reply to unqueried tweeets
+			if any(keyword in twt.text.lower() for keyword in keywords) :
+				the_tweet = processTweet(twt.text.lower(), twt.user.screen_name)
+				if not twt.user.following :
+					twt.user.follow() 
+	
+				#Updates status
+				try:
+					api.update_status(
+					status = the_tweet,
+					in_reply_to_status_id = twt.id,
+					)
+				except :
+					api.destroy_favorite(twt.id)
+					break
+	
+				print('Status has been updated. Please check the reply to tweet !')
 		else :
 			continue
-		#Checks for certain keywords so as to not reply to unqueried tweeets
-		if any(keyword in twt.text.lower() for keyword in keywords) :
-			the_tweet = processTweet(twt.text.lower(), twt.user.screen_name)
-			if not twt.user.following :
-				twt.user.follow() 
-
-			#Updates status
-			api.update_status(
-			status = the_tweet,
-			in_reply_to_status_id = init_id,
-			)
-
-			print('Status has been updated. Please check the reply to tweet !')
 
 	return init_id
-		
+
+
 
 #Function that deals with Datamus API calls and gets results for query
 def datamuse( word, usecase):
@@ -81,7 +86,9 @@ def datamuse( word, usecase):
 			if(tuple_val[0] == 'word') :
 				tweet_string += tuple_val[1] + ', '
 	tweet_string = tweet_string[:-2]
+
 	return tweet_string
+
 
 
 #Function to construct the string that will be tweeted as a reply
@@ -101,7 +108,15 @@ def processTweet(tweets, username) :
 	final_tweet = f" @{username} {query_word} {query_usecase} is "
 	final_tweet += datamuse(query_word, query_usecase)
 
+	if len(final_tweet) > 280 :
+		final_tweet = final_tweet[:280 - len(final_tweet)]
+		for i in range(len(final_tweet)-1,0,-1) :
+			if final_tweet[i] == ',':
+				final_tweet = final_tweet[:i]
+				break
+
 	return final_tweet
+
 
 
 #Driver function.Checks for new tweets every 2 minutes
