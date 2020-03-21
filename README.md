@@ -6,5 +6,6 @@ Tag the wordnerd_bot in your tweet followed by the word, which will be followed 
 ``` @wordnerd_bot universe synonyms ```
 
 
+
 #### TODO :
 * Assign job-scheduler to bot process through Heroku to automate API calls after fixed intervals
