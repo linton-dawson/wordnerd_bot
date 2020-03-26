@@ -44,6 +44,7 @@ def mentioned_reply(keywords,prev_id) :
 					status = the_tweet,
 					in_reply_to_status_id = twt.id,
 					)
+					print('Replying to user @',twt.user.screen_name)
 				except :
 					api.destroy_favorite(twt.id)
 					break
