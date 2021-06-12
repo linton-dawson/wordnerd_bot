@@ -85,7 +85,7 @@ def datamuse( word, usecase):
 	tweet_string = ''
 	for dict_value in word2json :
 		for tuple_val in dict_value.items() :
-			if(tuple_val[0] == 'word') :
+			if tuple_val[0] == 'word' :
 				tweet_string += tuple_val[1] + ', '
 	tweet_string = tweet_string[:-2]
 
